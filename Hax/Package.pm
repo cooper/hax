@@ -1,3 +1,4 @@
+# Copyright (c) 2013, Mitchell Cooper
 package Hax::Package;
 
 use warnings;
@@ -10,14 +11,14 @@ use Hax::Exporter prefix => 'package';
 # package_make_child_of('Evented::Person', 'EventedObject', 1)
 sub make_child_of {
     my ($package, $make_parent, $at_end) = @_;
-    my $isa = package_get_variable($package, '@ISA');
+    my $isa = get_variable($package, '@ISA');
     
     # package already inherits directly.
     return 1 if $make_parent ~~ @$isa;
     
     # check each class in ISA for inheritance.
     foreach my $parent (@$isa) {
-        return 1 $parent->isa($make_parent);
+        return 1 if $parent->isa($make_parent);
     }
     
     # add to ISA.
@@ -33,5 +34,9 @@ sub get_variable {
 
 sub set_variable {
 }
+
+# borrow Hax::Exporter's code exporter.
+sub export_code;
+*export_code = *Hax::Exporter::export_code;
 
 1

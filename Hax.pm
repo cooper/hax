@@ -1,3 +1,4 @@
+# Copyright (c) 2013, Mitchell Cooper
 package Hax::Exporter;
 
 use warnings;
