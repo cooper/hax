@@ -4,6 +4,8 @@ package Hax::Exporter;
 use warnings;
 use strict;
 
+use Hax::Package;
+
 our %p;
 
 # the exporter's import subroutine.
@@ -37,8 +39,7 @@ sub _import {
 # export_code('My::Package', 'my_sub', \&_my_sub)
 sub export_code {
     my ($package, $sub_name, $code) = @_;
-    no strict 'refs';
-    *{"${package}::$sub_name"} = $code;
+    Hax::Package::set_symbol($package, $sub_name, $code);
 }
 
 1

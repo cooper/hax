@@ -5,7 +5,10 @@ use warnings;
 use strict;
 use feature 'switch';
 
-use Hax::Exporter prefix => 'package';
+# Hax::Exporter must be imported during runtime because
+# it makes use of the set_symbol() subroutine.
+require Hax::Exporter;
+Hax::Exporter->import(prefix => 'package');
 
 # adds a package to an ISA list if the
 # package does not inherit from it already.
