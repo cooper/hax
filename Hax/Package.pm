@@ -5,17 +5,14 @@ use warnings;
 use strict;
 use feature 'switch';
 
-# Hax::Exporter must be imported during runtime because
-# it makes use of the set_symbol() subroutine.
-require Hax::Exporter;
-Hax::Exporter->import(prefix => 'package');
+use Hax::Exporter prefix => 'package';
 
 # adds a package to an ISA list if the
 # package does not inherit from it already.
 # package_make_child_of('Evented::Person', 'EventedObject', 1)
 sub make_child_of {
     my ($package, $make_parent, $at_end) = @_;
-    my $isa = get_symbol($package, '@ISA');
+    my $isa = get_symbol_ref($package, '@ISA');
     
     # package already inherits directly.
     return 1 if $make_parent ~~ @$isa;

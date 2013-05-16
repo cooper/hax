@@ -4,8 +4,6 @@ package Hax::Exporter;
 use warnings;
 use strict;
 
-use Hax::Package;
-
 our %p;
 
 # the exporter's import subroutine.
@@ -13,10 +11,8 @@ sub import {
     my ($class, %opts) = @_;
     my $package = caller;
     
-    # export sub prefix.
-    if (defined $opts{prefix}) {
-        $p{$package}{prefix} = $opts{prefix};
-    }
+    # store exporter options.
+    $p{$package} = \%opts;
     
     # export the package's import()
     export_code($package, 'import', sub { _import($package, (caller)[0], @_[1..$#_]) });
@@ -39,7 +35,8 @@ sub _import {
 # export_code('My::Package', 'my_sub', \&_my_sub)
 sub export_code {
     my ($package, $sub_name, $code) = @_;
-    Hax::Package::set_symbol($package, $sub_name, $code);
+    no strict 'refs';
+    *{"${package}::$sub_name"} = $code;
 }
 
 1
