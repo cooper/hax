@@ -4,7 +4,7 @@ package Hax::Exporter;
 use warnings;
 use strict;
 
-my %p;
+our %p;
 
 # the exporter's import subroutine.
 sub import {
@@ -17,7 +17,7 @@ sub import {
     }
     
     # export the package's import()
-    export_code($package, 'import', sub { _import($package, @_) });
+    export_code($package, 'import', sub { _import($package, (caller)[0], @_[1..$#_]) });
         
 }
 
