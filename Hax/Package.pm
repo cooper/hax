@@ -57,6 +57,24 @@ sub get_symbol_ref { get_symbol(@_, 1) }
 
 # set a symbol in package's symbol table.
 sub set_symbol {
+    my ($package, $variable, @values) = @_;
+    
+    # must start with a sigil.
+    return if $variable !~ m/^([@\*%\$])(\w+)$/;
+    my ($sigil, $var_name) = ($1, $2);
+    
+    my $symbol = $package.q(::).$var_name;
+    no strict 'refs';
+ 
+    # find the symbol.
+    given ($sigil) {
+        when ('$') { $$symbol = $values[0] }
+        when ('@') { @$symbol = @values    }
+        when ('*') { *$symbol = $values[0] }
+        when ('%') { %$symbol = @values    }
+    }
+    
+    return;
 }
 
 # borrow Hax::Exporter's code exporter.
